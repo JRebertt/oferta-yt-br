@@ -1,8 +1,8 @@
 import { readFileSync } from 'fs'
 import { join } from 'path'
 
-export default function Home() {
-  const htmlPath = join(process.cwd(), 'public', 'index.html')
+export default function Fut() {
+  const htmlPath = join(process.cwd(), 'public', 'fut', 'index.html')
   const html = readFileSync(htmlPath, 'utf-8')
 
   return (
