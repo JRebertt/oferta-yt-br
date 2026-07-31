@@ -1,0 +1,418 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube x Kwai | Painel VIP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ãcones FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Cores Base */
+        :root {
+            --bg-dark: #0a0a0a;
+            --yt-red: #E50914;
+            --kwai-orange: #ff8c1a;
+            --accent-lime: #c8ff2a;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Fundo Mosaico Desfocado */
+        .bg-mosaic {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background:
+                radial-gradient(900px 560px at 12% 18%, rgba(229, 9, 20, 0.18), transparent 58%),
+                radial-gradient(820px 500px at 88% 14%, rgba(255, 140, 26, 0.16), transparent 54%),
+                radial-gradient(720px 420px at 50% 100%, rgba(200, 255, 42, 0.05), transparent 56%),
+                linear-gradient(180deg, #0d0d0d 0%, #090909 100%);
+            filter: blur(18px) brightness(0.6);
+            z-index: -1;
+            transform: scale(1.05);
+        }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(30, 30, 30, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* AnimaÃ§Ã£o BotÃ£o Principal (Pulsante e Brilho) */
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            background-color: var(--yt-red);
+            transition: all 0.3s ease;
+            animation: pulse-soft 2s infinite;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes pulse-soft {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(229, 9, 20, 0.7); }
+            50% { transform: scale(1.02); box-shadow: 0 0 20px 0 rgba(229, 9, 20, 0.4); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(229, 9, 20, 0); }
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 200%; }
+            100% { left: 200%; }
+        }
+
+        /* Indicador Piscante */
+        .blink-dot {
+            animation: blinker 1s linear infinite;
+        }
+
+        @keyframes blinker {
+            50% { opacity: 0; }
+        }
+
+        /* Modal Animations */
+        .modal-overlay {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        /* Loader giratÃ³rio do PIX */
+        .spin-slow {
+            animation: spin 1.5s linear infinite;
+        }
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Ocultar setas de input number */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- Fundo -->
+    <div class="bg-mosaic"></div>
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 z-20 w-full px-4 pt-4 pb-3">
+        <div class="mx-auto flex w-full max-w-3xl flex-col items-center gap-3 rounded-[24px] border border-white/10 bg-black/25 px-4 py-3 backdrop-blur-xl">
+            <div class="flex w-full flex-col items-center gap-2 text-center select-none">
+                <div class="flex items-center justify-center gap-2.5 sm:gap-3">
+                    <div class="flex items-center gap-2">
+                        <img src="../assets/youtube_icon.svg" style="height: 28px; width: auto; filter: drop-shadow(0 0 10px rgba(255,0,0,0.14));" alt="YouTube">
+                        <span class="font-roboto-condensed text-[1.75rem] font-black leading-none tracking-[-0.04em] text-white">YouTube</span>
+                    </div>
+                    <span class="text-lg font-light text-gray-400">&times;</span>
+                    <img src="../assets/kwai_logo.png" style="height: 62px; width: auto; object-fit: contain; filter: drop-shadow(0 0 12px rgba(255,145,0,0.14));" alt="Kwai">
+                </div>
+                <span class="text-[0.82rem] font-semibold uppercase tracking-[0.18em] text-gray-300 sm:text-[0.88rem]">Painel do Avaliador VIP</span>
+            </div>
+
+            <div class="flex w-full max-w-[520px] items-center justify-center gap-2 rounded-2xl border border-yellow-400/45 bg-yellow-400/92 px-3 py-2 text-center text-[11px] font-black leading-tight text-black shadow-[0_12px_30px_rgba(234,179,8,0.22)] sm:text-xs">
+                <div class="h-2 w-2 flex-shrink-0 rounded-full bg-red-600 blink-dot shadow-[0_0_5px_red]"></div>
+                <span>CONVITE ATIVO PARA O SEU IP &bull; Apenas 3 vagas restantes na sua regi&atilde;o</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ConteÃºdo Principal -->
+    <main class="z-10 flex w-full max-w-2xl flex-col items-center pt-40 sm:pt-44 md:pt-48">
+        
+        <!-- Card Glassmorphism -->
+        <div class="glass-card rounded-2xl p-8 md:p-12 text-center w-full shadow-2xl relative border-t border-l border-white/20">
+            
+            <div class="mb-6 flex justify-center">
+                <div class="w-16 h-16 bg-[#E50914]/20 rounded-full flex items-center justify-center text-[#E50914] text-3xl shadow-[0_0_20px_rgba(229,9,20,0.3)]">
+                    <i class="fa-solid fa-gift"></i>
+                </div>
+            </div>
+
+            <h2 class="text-2xl md:text-3xl font-extrabold mb-4 leading-tight">
+                Identificamos uma carga de <span class="text-[#E50914]">recompensas retroativas</span> pendente para o seu perfil de usu&aacute;rio.
+            </h2>
+            
+            <p class="text-gray-300 text-base md:text-lg mb-10 px-4">
+                O seu hist&oacute;rico de visualiza&ccedil;&otilde;es nos qualificou para um saque imediato. Configure seu recebimento agora para liberar o painel.
+            </p>
+
+            <!-- O BotÃ£o Principal -->
+            <button id="openModalBtn" class="btn-primary w-full md:w-4/5 mx-auto py-5 px-6 rounded-xl text-white font-bold text-lg md:text-xl shadow-lg flex items-center justify-center gap-3 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-500/50">
+                <span>DESBLOQUEAR MEU ACESSO E RECOMPENSAS</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Overlay do Modal (Fundo Escuro) -->
+    <div id="modalOverlay" class="modal-overlay fixed inset-0 bg-black/90 z-50 flex items-end md:items-center justify-center backdrop-blur-sm">
+        
+        <!-- FormulÃ¡rio Pop-up (Desliza de baixo) -->
+        <div id="modalContent" class="modal-content bg-[#1c1c1c] w-full md:w-[500px] max-h-[90vh] overflow-y-auto rounded-t-3xl md:rounded-3xl border border-gray-800 shadow-2xl relative flex flex-col">
+            
+            <!-- BotÃ£o Fechar -->
+            <button id="closeModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition p-2">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <!-- CabeÃ§alho do FormulÃ¡rio -->
+            <div class="p-6 border-b border-gray-800 text-center">
+                <div class="w-12 h-12 mx-auto bg-green-500/10 text-green-500 rounded-full flex items-center justify-center text-xl mb-3">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white">Cadastro do Canal de Recebimento via PIX</h3>
+                <p class="text-sm text-gray-400 mt-1">Configure onde deseja receber seus saques.</p>
+            </div>
+
+            <!-- Corpo do FormulÃ¡rio -->
+            <div class="p-6 md:p-8 space-y-6">
+                
+                <!-- Campo 1: Tipo de Chave -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Tipo de Chave PIX</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                            <i class="fa-brands fa-pix text-teal-400"></i>
+                        </div>
+                        <select class="w-full bg-[#2a2a2a] border border-gray-700 text-white rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 appearance-none cursor-pointer transition">
+                            <option value="" disabled selected>Selecione o tipo de chave...</option>
+                            <option value="cpf">ðŸ“„ CPF / CNPJ</option>
+                            <option value="celular">ðŸ“± N&uacute;mero de Celular</option>
+                            <option value="email">ðŸ“§ E-mail</option>
+                            <option value="aleatoria">ðŸ”‘ Chave Aleat&oacute;ria</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-400">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campo 2: Insira sua Chave -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Insira sua Chave PIX</label>
+                    <div class="relative">
+                        <input type="text" id="pixInput" placeholder="Digite sua chave aqui..." class="w-full bg-[#2a2a2a] border border-gray-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition pr-10">
+                        
+                        <!-- Ãcone de Carregamento (Oculto por padrÃ£o) -->
+                        <div id="loadingIcon" class="absolute inset-y-0 right-0 pr-3 flex items-center hidden">
+                            <i class="fa-solid fa-circle-notch text-gray-400 spin-slow"></i>
+                        </div>
+                        
+                        <!-- Ãcone de Sucesso (Oculto por padrÃ£o) -->
+                        <div id="successIcon" class="absolute inset-y-0 right-0 pr-3 flex items-center hidden text-green-500">
+                            <i class="fa-solid fa-check-circle"></i>
+                        </div>
+                    </div>
+                    <!-- Mensagem de ValidaÃ§Ã£o -->
+                    <p id="pixMessage" class="text-xs mt-2 text-green-400 hidden font-medium flex items-center gap-1">
+                        <i class="fa-solid fa-check"></i> Chave estruturada e pronta para envio.
+                    </p>
+                </div>
+
+                <!-- Campos 3 e 4: Senha -->
+                <div class="space-y-4 pt-2 border-t border-gray-800">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Criar Senha Eletr&ocirc;nica de Saque (6 d&iacute;gitos num&eacute;ricos)</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                <i class="fa-solid fa-key"></i>
+                            </div>
+                            <input type="password" inputmode="numeric" maxlength="6" placeholder="• • • • • •" class="w-full bg-[#2a2a2a] border border-gray-700 text-white rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition text-center tracking-widest text-lg font-mono">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Confirme sua Senha de Saque</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <input type="password" inputmode="numeric" maxlength="6" placeholder="• • • • • •" class="w-full bg-[#2a2a2a] border border-gray-700 text-white rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition text-center tracking-widest text-lg font-mono">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BotÃ£o Checkout -->
+                <a href="https://go.perfectpay.com.br/PPU38CQEDHN" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-lg shadow-lg transition duration-200 mt-4 flex items-center justify-center gap-2 decoration-transparent">
+                    <i class="fa-solid fa-check-double"></i> ATIVAR RECEBIMENTO PIX
+                </a>
+            </div>
+
+            <!-- RodapÃ© de ConfianÃ§a -->
+            <div class="p-5 bg-[#141414] rounded-b-3xl text-center border-t border-gray-800">
+                <p class="text-[10px] sm:text-xs text-gray-500 leading-relaxed max-w-sm mx-auto">
+                    <i class="fa-solid fa-lock text-gray-600 mr-1"></i>
+                    Conex&atilde;o segura via protocolo de criptografia SSL de 256 bits. Seus dados cadastrais s&atilde;o protegidos de ponta a ponta e utilizados estritamente para o processamento e envio automatizado de valores via Banco Central.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- NotificaÃ§Ã£o Flutuante de Saque -->
+    <div id="notificationToast" class="fixed bottom-4 left-4 md:left-auto md:right-4 bg-[#1c1c1c] border border-gray-700 p-4 rounded-xl shadow-2xl flex items-center gap-4 transform translate-y-[150%] transition-transform duration-500 z-50 w-[calc(100%-2rem)] md:w-auto md:min-w-[300px]">
+        <div class="w-12 h-12 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center text-xl flex-shrink-0">
+            <i class="fa-solid fa-money-bill-trend-up"></i>
+        </div>
+        <div class="flex-1">
+            <p class="text-white text-sm font-bold flex items-center gap-2">
+                Saque Realizado! <i class="fa-solid fa-circle-check text-green-500"></i>
+            </p>
+            <p id="notificationText" class="text-gray-300 text-xs mt-1 leading-tight">...</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const openModalBtn = document.getElementById('openModalBtn');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const modalOverlay = document.getElementById('modalOverlay');
+            
+            const pixInput = document.getElementById('pixInput');
+            const loadingIcon = document.getElementById('loadingIcon');
+            const successIcon = document.getElementById('successIcon');
+            const pixMessage = document.getElementById('pixMessage');
+            
+            let typingTimer;
+            const doneTypingInterval = 1200; // Tempo em ms aguardando apÃ³s o lead parar de digitar para "validar"
+
+            // Controle do Modal
+            function openModal() {
+                modalOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Evita rolagem da pÃ¡gina fundo
+            }
+
+            function closeModal() {
+                modalOverlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+
+            openModalBtn.addEventListener('click', openModal);
+            closeModalBtn.addEventListener('click', closeModal);
+            
+            // Fechar clicando fora do card
+            modalOverlay.addEventListener('click', (e) => {
+                if(e.target === modalOverlay) {
+                    closeModal();
+                }
+            });
+
+            // LÃ³gica de MicrointeraÃ§Ã£o da Chave PIX
+            pixInput.addEventListener('input', () => {
+                clearTimeout(typingTimer);
+                
+                // Reseta estado para digitando
+                pixInput.classList.remove('border-green-500', 'focus:border-green-500', 'focus:ring-green-500');
+                pixInput.classList.add('border-gray-700');
+                
+                successIcon.classList.add('hidden');
+                pixMessage.classList.add('hidden');
+                
+                if (pixInput.value.length > 0) {
+                    loadingIcon.classList.remove('hidden');
+                    
+                    // Inicia contagem para fingir processamento do sistema bancÃ¡rio
+                    typingTimer = setTimeout(validatePix, doneTypingInterval);
+                } else {
+                    loadingIcon.classList.add('hidden');
+                }
+            });
+
+            function validatePix() {
+                loadingIcon.classList.add('hidden');
+                
+                // Aplica estilos de Sucesso
+                pixInput.classList.remove('border-gray-700');
+                pixInput.classList.add('border-green-500', 'focus:border-green-500', 'focus:ring-green-500');
+                
+                successIcon.classList.remove('hidden');
+                pixMessage.classList.remove('hidden');
+            }
+
+            // --- Sistema de NotificaÃ§Ãµes de Saque ---
+            const notificationToast = document.getElementById('notificationToast');
+            const notificationText = document.getElementById('notificationText');
+            
+            const names = ["Ana Silva", "Carlos M.", "Jo&atilde;o Pedro", "Maria F.", "Lucas T.", "Juliana C.", "Pedro R.", "Fernanda L.", "Rafael G.", "Amanda B.", "Diego A.", "Camila V."];
+            
+            function showNotification() {
+                // Valor entre 600 e 6000
+                const value = Math.floor(Math.random() * (6000 - 600 + 1)) + 600;
+                const formattedValue = value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                
+                // Nome aleatÃ³rio
+                const randomName = names[Math.floor(Math.random() * names.length)];
+                
+                // Tempo aleatÃ³rio (1 a 59 minutos)
+                const time = Math.floor(Math.random() * 59) + 1;
+                
+                // Atualizar texto
+                notificationText.innerHTML = `<span class="text-green-400 font-bold">${randomName}</span> acabou de sacar <span class="text-white font-bold">${formattedValue}</span> h&aacute; ${time} min.`;
+                
+                // Mostrar animaÃ§Ã£o
+                notificationToast.classList.remove('translate-y-[150%]');
+                notificationToast.classList.add('translate-y-0');
+                
+                // Esconder apÃ³s 4.5 segundos
+                setTimeout(() => {
+                    notificationToast.classList.remove('translate-y-0');
+                    notificationToast.classList.add('translate-y-[150%]');
+                }, 4500);
+                
+                // Agendar prÃ³xima notificaÃ§Ã£o (entre 7 e 14 segundos)
+                const nextTime = Math.floor(Math.random() * (14000 - 7000 + 1)) + 7000;
+                setTimeout(showNotification, nextTime);
+            }
+
+            // Iniciar primeira notificaÃ§Ã£o apÃ³s 2 segundos
+            setTimeout(showNotification, 2000);
+        });
+    </script>
+</body>
+</html>
+
+
+

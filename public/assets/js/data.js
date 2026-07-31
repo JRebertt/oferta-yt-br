@@ -29,13 +29,13 @@ const questions = [
 const initialBonus = 250.00;
 
 const videoInfo = {
-    title: "CONFIRMADO: O Youtube está pagando por assistir novos vídeos",
+    title: "CONFIRMADO: novas recompensas foram liberadas para o seu perfil",
     views: "1.2M visualizações",
     timeAgo: "há 2 horas",
     channel: {
-        name: "Youtube Recompensas",
+        name: "Central de Recompensas",
         subscribers: "17.4M",
-        avatarUrl: "assets/youtube_icon.svg"
+        avatarUrl: "images/cropped-1384060-192x192.png"
     },
     stats: {
         likes: "45K",
@@ -45,8 +45,8 @@ const videoInfo = {
     },
     cta: {
         text: "DESTRAVAR MEU SAQUE AGORA",
-        delay: 830000,
-        link: "https://go.perfectpay.com.br/PPU38COP9EJ"
+        delay: 810000,
+        link: "https://checkout.perfectpay.com.br/pay/PPU38CQ99R1?"
     }
 };
 
@@ -86,7 +86,7 @@ const comments = [
     {
         author: "Rafael Santos",
         time: "há 1 h",
-        text: "Funciona mesmo! Já tinha visto outros vídeos assim que eram golpe, mas esse é oficial do Google/Youtube.",
+        text: "Funciona mesmo! Já tinha visto outras promessas assim que não davam em nada, mas aqui o processo rodou certinho.",
         "avatar": "https://randomuser.me/api/portraits/men/67.jpg?v=20260609-names1",
         likes: "342",
         replies: []
@@ -102,7 +102,7 @@ const comments = [
                 author: "Suporte Oficial",
                 time: "há 10 min",
                 text: "Oi Carla! O acesso é gratuito, mas para segurança de todos, há pequenas taxas de verificação que são devolvidas junto com seu saque.",
-                avatar: "assets/youtube_icon.svg",
+                avatar: "images/cropped-1384060-192x192.png",
                 likes: "89"
             }
         ]
@@ -110,7 +110,7 @@ const comments = [
     {
         author: "Tiago Ferreira",
         time: "há 3 h",
-        text: "Mano, o YouTube é foda! Com a grana dessa semana já consegui pagar a parcela da minha moto. Só gratidão por terem liberado essa ferramenta pro Brasil. 🙏",
+        text: "Com a grana dessa semana já consegui pagar a parcela da minha moto. Só gratidão por terem liberado essa ferramenta pro Brasil. 🙏",
         "avatar": "https://randomuser.me/api/portraits/men/22.jpg?v=20260609-names1",
         likes: "267",
         replies: []
@@ -199,7 +199,7 @@ const upsells = {
     up7: {
         title: "Licença de Software",
         badge: "Tecnologia",
-        desc: "Para continuar utilizando nossa plataforma de avaliações, é necessário renovar sua licença de uso do software YouTube Rewards.",
+        desc: "Para continuar utilizando nossa plataforma de avaliações, é necessário renovar sua licença de uso do painel premium de recompensas.",
         price: "27,00",
         link: "https://go.perfectpay.com.br/PPU38CPBJ9C",
         icon: "terminal",

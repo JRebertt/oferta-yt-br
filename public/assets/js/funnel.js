@@ -52,7 +52,7 @@
         },
 
         handleCheckout() {
-            const funnelLink = window.currentCheckoutLink || "https://go.perfectpay.com.br/PPU38COP9EJ";
+            const funnelLink = window.currentCheckoutLink || "https://go.perfectpay.com.br/PPU38CQ9ABM";
             const checkoutUrl = new URL(funnelLink);
 
             const currentParams = new URLSearchParams(window.location.search);
