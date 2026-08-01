@@ -1,16 +1,3 @@
-/* Escaneia apenas o app/ (nao o public/, que tem os HTML clonados com classes
-   arbitrarias de url() relativa que quebram o bundler). */
-@import "tailwindcss" source(none);
-@source "./**/*.{ts,tsx,js,jsx}";
-
-/* Tema custom das paginas clonadas (equivalente ao tailwind.config do Play CDN) */
-@theme {
-  --color-yt-black: #050811;
-  --color-yt-gray: #13233c;
-  --color-yt-red: #ff0000;
-  --color-yt-text: #ffffff;
-
-  --font-roboto: "Roboto", sans-serif;
-  --font-oswald: "Oswald", sans-serif;
-  --font-roboto-condensed: '"Roboto Condensed"', sans-serif;
-}
+/* Tailwind v3 compilado (igual ao Play CDN v3.4.17 da origem) — gerado por
+   `npx tailwindcss@3.4.17 -c tailwind.config.js -i _tw-input.css -o app/tailwind.css` */
+@import "./tailwind.css";

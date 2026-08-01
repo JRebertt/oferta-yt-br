@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "build:css": "tailwindcss@3.4.17 -c tailwind.config.js -i _tw-input.css -o app/tailwind.css"
   },
   "dependencies": {
     "next": "16.2.12",
