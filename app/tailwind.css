@@ -1520,8 +1520,9 @@ video {
   border-color: rgb(255 255 255 / 0.05);
 }
 
-.border-yellow-400\/45 {
-  border-color: rgb(250 204 21 / 0.45);
+.border-yellow-400 {
+  --tw-border-opacity: 1;
+  border-color: rgb(250 204 21 / var(--tw-border-opacity, 1));
 }
 
 .border-yellow-500\/25 {
@@ -1754,6 +1755,11 @@ video {
 
 .bg-white\/5 {
   background-color: rgb(255 255 255 / 0.05);
+}
+
+.bg-yellow-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(250 204 21 / var(--tw-bg-opacity, 1));
 }
 
 .bg-yellow-500\/10 {

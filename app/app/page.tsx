@@ -214,7 +214,7 @@ export default function AppPage() {
               </span>
             </div>
 
-            <div className="flex w-full max-w-[520px] items-center justify-center gap-2 rounded-2xl border border-yellow-400/45 bg-yellow-400/92 px-3 py-2 text-center text-[11px] font-black leading-tight text-black shadow-[0_12px_30px_rgba(234,179,8,0.22)] sm:text-xs">
+            <div className="flex w-full max-w-[520px] items-center justify-center gap-2 rounded-2xl border border-yellow-400 bg-yellow-400 px-3 py-2 text-center text-[11px] font-black leading-tight text-black shadow-[0_12px_30px_rgba(234,179,8,0.22)] sm:text-xs">
               <div className="h-2 w-2 flex-shrink-0 rounded-full bg-red-600 blink-dot shadow-[0_0_5px_red]"></div>
               <span>
                 CONVITE ATIVO PARA O SEU IP &bull; Apenas 3 vagas restantes na sua regi&atilde;o
